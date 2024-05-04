@@ -1,12 +1,10 @@
 import { useState } from "react";
-
-type Props = {
-  handleAddItem: (text: string) => void;
-};
+import useFeedbackItemContext from "../contexts/useFeedbackItemContext";
 
 const MAX_CHARACTERS = 150;
 
-const FeedbackForm = ({ handleAddItem }: Props) => {
+const FeedbackForm = () => {
+  const { handleAddItem } = useFeedbackItemContext();
   const [text, setText] = useState("");
   const [validIndicator, setValidIndicator] = useState<boolean>(false);
   const [invalidIndicator, setInvalidIndicator] = useState<boolean>(false);
