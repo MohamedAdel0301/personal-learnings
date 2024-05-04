@@ -17,10 +17,13 @@ const FeedbackItem = ({ feedbackItem }: Props) => {
       onClick={() => setOpen((prev) => !prev)}
       className={`feedback ${open ? "feedback--expand" : ""}`}
     >
-      <button onClick={(e) => {
-        setUpvotes((prev) => prev + 1)
-        e.stopPropagation()
-        }}>
+      <button
+        onClick={(e) => {
+          setUpvotes((prev) => prev + 1);
+          e.currentTarget.disabled = true;
+          e.stopPropagation();
+        }}
+      >
         <TriangleUpIcon />
         <span>{upvotes}</span>
       </button>
