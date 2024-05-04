@@ -10,15 +10,19 @@ const FeedbackItem = ({ feedbackItem }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const { upvoteCount, badgeLetter, daysAgo, text, company } = feedbackItem;
+  const [upvotes, setUpvotes] = useState<number>(upvoteCount);
 
   return (
     <li
       onClick={() => setOpen((prev) => !prev)}
       className={`feedback ${open ? "feedback--expand" : ""}`}
     >
-      <button>
+      <button onClick={(e) => {
+        setUpvotes((prev) => prev + 1)
+        e.stopPropagation()
+        }}>
         <TriangleUpIcon />
-        <span>{upvoteCount}</span>
+        <span>{upvotes}</span>
       </button>
       <div>
         <p>{badgeLetter}</p>
