@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useFeedbackItemContext from "../contexts/useFeedbackItemContext";
+import {useFeedbackItemContext} from "../../lib/hooks";
 
 const MAX_CHARACTERS = 150;
 

@@ -1,5 +1,7 @@
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { FeedbackItemType } from "../../lib/types";
+import { feedbacksEndpoint } from "../../lib/constants";
+import { useFeedbackItems } from "../../lib/hooks";
 
 type FeedbackItemsContextType = {
   feedbackItems: FeedbackItemType[];
@@ -20,7 +22,8 @@ const FeedbackItemsContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [selectedCompany, setSelectedCompany] = useState<string>("");
-  const [feedbackItems, setFeedbackItems] = useState<FeedbackItemType[]>([]);
+  const { isPending, setFeedbackItems, feedbackItems, errorMessage } =
+    useFeedbackItems();
   const filteredFeedbackItems = useMemo(
     () =>
       selectedCompany
@@ -30,8 +33,6 @@ const FeedbackItemsContextProvider = ({
         : feedbackItems,
     [selectedCompany, feedbackItems]
   );
-  const [isPending, setPending] = useState<boolean>(false);
-  const [errorMessage, setErrormessage] = useState<string>("");
   const companyList: string[] = useMemo(
     () =>
       feedbackItems
@@ -56,35 +57,15 @@ const FeedbackItemsContextProvider = ({
     };
     setFeedbackItems((items) => [...items, newItem]);
 
-    await fetch(
-      "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks",
-      {
-        method: "POST",
-        body: JSON.stringify(newItem),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    );
+    await fetch(feedbacksEndpoint, {
+      method: "POST",
+      body: JSON.stringify(newItem),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
   };
-  useEffect(() => {
-    const fetchFunction = async () => {
-      setPending(true);
-      try {
-        const response = await fetch(
-          "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks"
-        );
-        const data = await response.json();
-        setFeedbackItems(data.feedbacks);
-      } catch (error) {
-        setErrormessage("An Error has occured");
-      } finally {
-        setPending(false);
-      }
-    };
-    fetchFunction();
-  }, []);
   return (
     <FeedbackItemsContext.Provider
       value={{

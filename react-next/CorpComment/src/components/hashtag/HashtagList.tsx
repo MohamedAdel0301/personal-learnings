@@ -1,4 +1,4 @@
-import useFeedbackItemContext from "../contexts/useFeedbackItemContext";
+import {useFeedbackItemContext} from "../../lib/hooks";
 import HashtagItem from "./HashtagItem";
 
 const HashtagList = () => {

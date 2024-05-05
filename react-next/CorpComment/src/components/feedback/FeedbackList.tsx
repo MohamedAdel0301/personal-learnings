@@ -1,7 +1,7 @@
 import FeedbackItem from "./FeedbackItem";
 import Spinner from "../misc/Spinner";
 import ErrorMessage from "../ErrorMessage";
-import useFeedbackItemContext from "../contexts/useFeedbackItemContext";
+import {useFeedbackItemContext} from "../../lib/hooks";
 
 const FeedbackList = () => {
   const { isPending, errorMessage, filteredFeedbackItems } =
