@@ -1,10 +1,10 @@
 import { useState } from "react";
-import {useFeedbackItemContext} from "../../lib/hooks";
+import { useFeedbackItemStore } from "../stores/feedbackItemsStore";
 
 const MAX_CHARACTERS = 150;
 
 const FeedbackForm = () => {
-  const { handleAddItem } = useFeedbackItemContext();
+  const handleAddItem = useFeedbackItemStore((state) => state.addItemtoList);
   const [text, setText] = useState("");
   const [validIndicator, setValidIndicator] = useState<boolean>(false);
   const [invalidIndicator, setInvalidIndicator] = useState<boolean>(false);
