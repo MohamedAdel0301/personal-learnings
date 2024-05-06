@@ -1,0 +1,1 @@
+f (start === end) return result;
