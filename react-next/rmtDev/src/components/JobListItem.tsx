@@ -1,13 +1,5 @@
 import BookmarkIcon from "./BookmarkIcon";
-
-export type JobItem = {
-  badgeLetters: string;
-  id: number;
-  company: string;
-  title: string;
-  daysAgo: number;
-  relevanceScore: number;
-};
+import { JobItem } from "../lib/types";
 
 export default function JobListItem({ jobItem }: { jobItem: JobItem }) {
   return (
