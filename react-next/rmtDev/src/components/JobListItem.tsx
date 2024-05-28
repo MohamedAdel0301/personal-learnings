@@ -1,9 +1,14 @@
 import BookmarkIcon from "./BookmarkIcon";
 import { JobItem } from "../lib/types";
 
-export default function JobListItem({ jobItem }: { jobItem: JobItem }) {
+type Props = {
+  jobItem: JobItem;
+  isActive: boolean;
+};
+
+export default function JobListItem({ jobItem, isActive }: Props) {
   return (
-    <li className="job-item">
+    <li className={`job-item ${isActive ? "job-item--active" : ""}`}>
       <a href={`#${jobItem.id}`} className="job-item__link">
         <div className="job-item__badge">{jobItem.badgeLetters}</div>
 

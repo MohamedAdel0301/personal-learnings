@@ -1,5 +1,5 @@
 type Props = {
-  searchText: string;
+  searchText: string | undefined;
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
 };
 
