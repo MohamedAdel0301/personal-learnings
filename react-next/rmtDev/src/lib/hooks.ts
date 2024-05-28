@@ -26,6 +26,14 @@ import toast from "react-hot-toast";
 //   };
 // };
 
+const handleErrorToast = (error: unknown) => {
+  if (error instanceof Error) {
+    toast.error(error.message);
+  } else {
+    toast.error("An error has occured");
+  }
+};
+
 export const useActiveId = () => {
   const [activeId, setActiveId] = useState<number | null>(null);
 
@@ -94,13 +102,7 @@ export const useJobItem = (activeId: number) => {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: Boolean(activeId),
-      onError: (error) => {
-        if (error instanceof Error) {
-          toast.error(error.message);
-        } else {
-          toast.error("An error has occured");
-        }
-      },
+      onError: handleErrorToast,
     }
   );
   const jobItem = data?.jobItem;
@@ -146,13 +148,7 @@ export const useJobItems = (searchText: string) => {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: Boolean(searchText),
-      onError: (error) => {
-        if (error instanceof Error) {
-          toast.error(error.message);
-        } else {
-          toast.error("An error has occured");
-        }
-      },
+      onError: handleErrorToast,
     }
   );
   return { jobItems: data?.jobItems, isLoading: isInitialLoading } as const;

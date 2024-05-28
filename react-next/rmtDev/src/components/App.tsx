@@ -19,9 +19,20 @@ function App() {
   const [searchText, setSearchText] = useState<string>("");
   const debouncedValue = useDebounce(searchText, 500);
   const { isLoading, jobItems } = useJobItems(debouncedValue);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const totalNumberofResults = jobItems?.length || 0;
-  const jobItemsSliced = jobItems?.slice(0, 7) || [];
+  const jobItemsSliced =
+    jobItems?.slice(currentPage * 7 - 7, currentPage * 7) || [];
+  const totalNumberOfPages = totalNumberofResults / 7;
+
+  const handleChangePage = (direction: "next" | "previous") => {
+    if (direction === "next") {
+      setCurrentPage((prev) => prev + 1);
+    } else if (direction === "previous") {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
 
   return (
     <>
@@ -42,14 +53,18 @@ function App() {
             <SortingControls />
           </SidebarTop>
           <JobList jobItems={jobItemsSliced} isLoading={isLoading} />
-          <PaginationControls />
+          <PaginationControls
+            totalNumberOfPages={totalNumberOfPages}
+            currentPage={currentPage}
+            onClick={handleChangePage}
+          />
         </Sidebar>
 
         <JobItemContent />
       </Container>
 
       <Footer />
-      <Toaster position="bottom-right"/>
+      <Toaster position="bottom-right" />
     </>
   );
 }
