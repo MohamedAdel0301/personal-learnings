@@ -12,14 +12,11 @@ import JobList from "./JobList";
 import PaginationControls from "./PaginationControls";
 import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
-import { useActiveId, useJobItems } from "../lib/hooks";
+import { useJobItems } from "../lib/hooks";
 
 function App() {
   const [searchText, setSearchText] = useState<string>("");
   const { isLoading, jobItems } = useJobItems(searchText);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { activeId } = useActiveId();
 
   return (
     <>
