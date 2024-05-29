@@ -14,24 +14,44 @@ import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import { Toaster } from "react-hot-toast";
+import { RESULTS_PER_PAGE } from "../lib/constants";
+import { DirectionTypes, SortTypes } from "../lib/types";
 
 function App() {
   const [searchText, setSearchText] = useState<string>("");
   const debouncedValue = useDebounce(searchText, 500);
-  const { isLoading, jobItems } = useJobItems(debouncedValue);
+  const [sortBy, setSortBy] = useState<SortTypes>("relevant");
   const [currentPage, setCurrentPage] = useState(1);
+  const { isLoading, jobItems } = useJobItems(debouncedValue);
 
   const totalNumberofResults = jobItems?.length || 0;
+
+  const jobItemsSorted = [...(jobItems || [])].sort((a, b) => {
+    if (sortBy === "relevant") {
+      return b.relevanceScore - a.relevanceScore;
+    } else {
+      return a.daysAgo - b.daysAgo;
+    }
+  });
+
   const jobItemsSliced =
-    jobItems?.slice(currentPage * 7 - 7, currentPage * 7) || [];
+    jobItemsSorted?.slice(
+      currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
+      currentPage * RESULTS_PER_PAGE
+    ) || [];
   const totalNumberOfPages = totalNumberofResults / 7;
 
-  const handleChangePage = (direction: "next" | "previous") => {
+  const handleChangePage = (direction: DirectionTypes) => {
     if (direction === "next") {
       setCurrentPage((prev) => prev + 1);
     } else if (direction === "previous") {
       setCurrentPage((prev) => prev - 1);
     }
+  };
+
+  const handleChangeSortBy = (newSortBy: SortTypes) => {
+    setCurrentPage(1);
+    setSortBy(newSortBy);
   };
 
   return (
@@ -50,7 +70,7 @@ function App() {
         <Sidebar>
           <SidebarTop>
             <ResultsCount totalNumberofResults={totalNumberofResults} />
-            <SortingControls />
+            <SortingControls onClick={handleChangeSortBy} sortBy={sortBy} />
           </SidebarTop>
           <JobList jobItems={jobItemsSliced} isLoading={isLoading} />
           <PaginationControls
