@@ -39,6 +39,7 @@ function App() {
       currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
       currentPage * RESULTS_PER_PAGE
     ) || [];
+
   const totalNumberOfPages = totalNumberofResults / 7;
 
   const handleChangePage = (direction: DirectionTypes) => {
