@@ -1,7 +1,10 @@
-type Props = {
-  totalNumberofResults: number;
-};
+import { useJobItemsContext } from "../contexts/JobItemsContextProvider";
 
-export default function ResultsCount({ totalNumberofResults }: Props) {
-  return <p className="count"><span className="u-bold">{totalNumberofResults}</span> results</p>;
+export default function ResultsCount() {
+  const { totalNumberofResults } = useJobItemsContext();
+  return (
+    <p className="count">
+      <span className="u-bold">{totalNumberofResults}</span> results
+    </p>
+  );
 }
