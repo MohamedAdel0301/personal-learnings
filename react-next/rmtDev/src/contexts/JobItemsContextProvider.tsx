@@ -1,4 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { useSearchQuery } from "../lib/hooks";
 import { RESULTS_PER_PAGE } from "../lib/constants";
 import { SortTypes, DirectionTypes, JobItem } from "../lib/types";
@@ -16,7 +22,7 @@ type JobItemsContextType = {
   totalNumberOfPages: number;
   totalNumberofResults: number;
   sortBy: SortTypes;
-  currentPage:number
+  currentPage: number;
 };
 
 const JobItemsContext = createContext<JobItemsContextType | null>(null);
@@ -29,48 +35,73 @@ const JobItemsContextProvider = ({ children }: Props) => {
 
   const totalNumberofResults = jobItems?.length || 0;
 
-  const jobItemsSorted = [...(jobItems || [])].sort((a, b) => {
-    if (sortBy === "relevant") {
-      return b.relevanceScore - a.relevanceScore;
-    } else {
-      return a.daysAgo - b.daysAgo;
-    }
-  });
+  const jobItemsSorted = useMemo(
+    () =>
+      [...(jobItems || [])].sort((a, b) => {
+        if (sortBy === "relevant") {
+          return b.relevanceScore - a.relevanceScore;
+        } else {
+          return a.daysAgo - b.daysAgo;
+        }
+      }),
+    [sortBy, jobItems]
+  );
 
-  const jobItemsSliced =
-    jobItemsSorted?.slice(
-      currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
-      currentPage * RESULTS_PER_PAGE
-    ) || [];
+  const jobItemsSliced = useMemo(
+    () =>
+      jobItemsSorted?.slice(
+        currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
+        currentPage * RESULTS_PER_PAGE
+      ) || [],
+    [jobItemsSorted, currentPage]
+  );
 
   const totalNumberOfPages = totalNumberofResults / 7;
 
-  const handleChangePage = (direction: DirectionTypes) => {
-    if (direction === "next") {
-      setCurrentPage((prev) => prev + 1);
-    } else if (direction === "previous") {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
+  const handleChangePage = useCallback(
+    () => (direction: DirectionTypes) => {
+      if (direction === "next") {
+        setCurrentPage((prev) => prev + 1);
+      } else if (direction === "previous") {
+        setCurrentPage((prev) => prev - 1);
+      }
+    },
+    []
+  );
 
-  const handleChangeSortBy = (newSortBy: SortTypes) => {
-    setCurrentPage(1);
-    setSortBy(newSortBy);
-  };
+  const handleChangeSortBy = useCallback(
+    () => (newSortBy: SortTypes) => {
+      setCurrentPage(1);
+      setSortBy(newSortBy);
+    },
+    []
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      isLoading,
+      jobItemsSliced,
+      handleChangeSortBy,
+      handleChangePage,
+      totalNumberOfPages,
+      totalNumberofResults,
+      sortBy,
+      currentPage,
+    }),
+    [
+      isLoading,
+      jobItemsSliced,
+      handleChangeSortBy,
+      handleChangePage,
+      totalNumberOfPages,
+      totalNumberofResults,
+      sortBy,
+      currentPage,
+    ]
+  );
 
   return (
-    <JobItemsContext.Provider
-      value={{
-        isLoading,
-        jobItemsSliced,
-        handleChangeSortBy,
-        handleChangePage,
-        totalNumberOfPages,
-        totalNumberofResults,
-        sortBy,
-        currentPage,
-      }}
-    >
+    <JobItemsContext.Provider value={contextValue}>
       {children}
     </JobItemsContext.Provider>
   );
