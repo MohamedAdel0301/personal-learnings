@@ -1,13 +1,15 @@
 import { forwardRef } from "react";
 import { useBookmarksContext } from "../contexts/BookmarksContextProvider";
 import JobList from "./JobList";
+import { createPortal } from "react-dom";
 
 const BookmarksPopover = forwardRef<HTMLDivElement>((_, ref) => {
   const { jobItems, isLoading } = useBookmarksContext();
-  return (
+  return createPortal(
     <div ref={ref} className="bookmarks-popover">
       <JobList jobItems={jobItems} isLoading={isLoading} />
-    </div>
+    </div>,
+    document.body
   );
 });
 
