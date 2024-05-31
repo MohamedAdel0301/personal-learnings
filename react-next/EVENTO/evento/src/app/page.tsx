@@ -1,26 +1,20 @@
+import H1 from "@/components/H1";
+import SearchForm from "@/components/SearchForm";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <main className="flex flex-col items-center pt-36">
-      <h1 className="text-3xl font-bold tracking-tight lg:text-6xl">
-        Find Events Around You
-      </h1>
+      <H1>Find Events Around You</H1>
       <p className="mb-12 mt-7 text-2xl opacity-75 lg:text-3xl">
         Browse more than{" "}
-        <span className="text-accent font-bold italic underline">
+        <span className="font-bold italic text-accent underline">
           10,000 events
         </span>{" "}
         around you
       </p>
 
-      <form className="w-full sm:w-[580px]">
-        <input
-          placeholder="Search Events in any city..."
-          spellCheck={false}
-          className="ring-accent/50 h-16 w-full rounded-lg bg-white/[7%] px-6 outline-none transition-colors focus:bg-white/10 focus:ring-2"
-        />
-      </form>
+      <SearchForm />
 
       <section className="mt-4 flex gap-x-4 text-sm text-white/50">
         <p>Popular:</p>
