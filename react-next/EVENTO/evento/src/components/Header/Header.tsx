@@ -1,25 +1,21 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import { LinkType } from "@/lib/types";
 
-type LinksType = {
-  name: string;
-  path: string;
-};
+const links: LinkType[] = [
+  {
+    name: "Home",
+    path: "/",
+  },
+  {
+    name: "All Events",
+    path: "/events/all",
+  },
+];
 
 const Header = () => {
-  const links: LinksType[] = [
-    {
-      name: "Home",
-      path: "/",
-    },
-    {
-      name: "All Events",
-      path: "/events/all",
-    },
-  ];
-
   return (
-    <header className="flex h-14 items-center justify-between border-b border-white/10 px-3 sm:px-9">
+    <header className="flex h-14 items-center justify-between border-b border-white/10 px-3 md:px-9">
       <Logo />
       <nav>
         <ul className="flex gap-x-6 text-sm">
