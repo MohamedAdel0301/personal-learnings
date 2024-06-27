@@ -1,8 +1,15 @@
 import React from "react";
+import { cn } from "@/lib/utils";
+type Props = {
+  children: React.ReactNode;
+  className?: string;
+};
 
-const H1 = ({ children }: { children: React.ReactNode }) => {
+const H1 = ({ children, className }: Props) => {
   return (
-    <h1 className="text-3xl font-bold tracking-tight lg:text-6xl">
+    <h1
+      className={cn("text-3xl font-bold tracking-tight lg:text-6xl", className)}
+    >
       {children}
     </h1>
   );

@@ -22,7 +22,7 @@ const EventsPage = async ({ params: { city } }: EventsProps) => {
       {city === "all" ? (
         <H1>All Events</H1>
       ) : (
-        <H1>
+        <H1 className="mb-28">
           Events In{" "}
           <span className="capitalize text-accent underline">
             {city.charAt(0).toUpperCase() + city.slice(1)}
