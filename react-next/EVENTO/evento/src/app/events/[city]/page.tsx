@@ -20,7 +20,7 @@ const EventsPage = async ({ params: { city } }: EventsProps) => {
   return (
     <main className="flex flex-col items-center px-[20px] py-24">
       {city === "all" ? (
-        <H1>All Events</H1>
+        <H1 className="mb-28">All Events</H1>
       ) : (
         <H1 className="mb-28">
           Events In{" "}

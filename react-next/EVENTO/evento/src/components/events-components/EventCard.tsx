@@ -10,7 +10,7 @@ const EventCard = ({ event }: { event: EventoEvent }) => {
     >
       <section
         key={event.id}
-        className={`relative flex h-full w-full flex-col overflow-hidden rounded-xl bg-white/[3%] transition-transform delay-75 hover:scale-110 active:scale-105`}
+        className={`state-effects relative flex h-full w-full flex-col overflow-hidden rounded-xl bg-white/[3%]`}
       >
         <Image
           src={event.imageUrl}
