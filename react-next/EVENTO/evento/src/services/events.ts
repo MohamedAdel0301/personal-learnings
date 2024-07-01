@@ -2,12 +2,12 @@ import { toTitalCase } from "@/lib/utils";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 
-export async function getEvents(city: string) {
+export async function getEvents(city: string, page = 1) {
   // const res = await fetch(
   //   `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`,
   // );
   // const events: EventoEvent[] = await res.json();
-
+  ``;
   const events = await prisma.eventoEvent.findMany({
     where: {
       city: city === "all" ? undefined : toTitalCase(city),
@@ -15,8 +15,19 @@ export async function getEvents(city: string) {
     orderBy: {
       date: "asc",
     },
+    take: 6,
+    skip: (page - 1) * 6,
   });
-  return events;
+
+  const totalCount = await prisma.eventoEvent.count({
+    where: {
+      city: city === "all" ? undefined : toTitalCase(city),
+    },
+  });
+  return {
+    events,
+    totalCount
+  };
 }
 
 export async function getEvent(slug: string) {

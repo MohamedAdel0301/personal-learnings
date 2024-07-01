@@ -1,14 +1,21 @@
-import { EventoEvent } from "@prisma/client";
 import React from "react";
 import EventCard from "./EventCard";
 import { getEvents } from "@/services/events";
+import PaginationControls from "./PaginationControls";
+import { EventoEvent } from "@prisma/client";
 
 type Props = {
   city: string;
+  page: number;
 };
 
-const EventsList = async ({ city }: Props) => {
-  const events: EventoEvent[] = await getEvents(city);
+const EventsList = async ({ city, page }: Props) => {
+  const { events, totalCount }: { events: EventoEvent[]; totalCount: number } =
+    await getEvents(city, page);
+
+  const previousPath = page > 1 ? `/events/${city}/?page=${page - 1}` : "";
+  const nextPath =
+    totalCount > page * 6 ? `/events/${city}/?page=${page + 1}` : "";
 
   return (
     <React.Fragment>
@@ -17,6 +24,7 @@ const EventsList = async ({ city }: Props) => {
           <EventCard key={event.id} event={event} />
         ))}
       </section>
+      <PaginationControls nextPath={nextPath} previousPath={previousPath} />
     </React.Fragment>
   );
 };

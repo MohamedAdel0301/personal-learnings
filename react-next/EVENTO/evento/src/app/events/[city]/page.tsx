@@ -9,13 +9,15 @@ type EventsProps = {
   params: { city: string };
 };
 
-export function generateMetadata({ params }: EventsProps): Metadata {
-  return {
-    title: `Events in ${toTitalCase(params.city)}`,
-  };
-}
+type EventsPageProps = EventsProps & {
+  searchParams: { page: string };
+};
 
-const EventsPage = async ({ params: { city } }: EventsProps) => {
+const EventsPage = async ({
+  params: { city },
+  searchParams,
+}: EventsPageProps) => {
+  const page = searchParams.page || 1;
   return (
     <main className="flex flex-col items-center px-[20px] py-24">
       {city === "all" ? (
@@ -28,11 +30,17 @@ const EventsPage = async ({ params: { city } }: EventsProps) => {
           </span>
         </H1>
       )}
-      <Suspense fallback={<Loading />}>
-        <EventsList city={city} />
+      <Suspense key={city + page} fallback={<Loading />}>
+        <EventsList city={city} page={Number(page)} />
       </Suspense>
     </main>
   );
 };
 
 export default EventsPage;
+
+export function generateMetadata({ params }: EventsProps): Metadata {
+  return {
+    title: `Events in ${toTitalCase(params.city)}`,
+  };
+}
