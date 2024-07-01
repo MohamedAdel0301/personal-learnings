@@ -1,4 +1,4 @@
-import { EventoEvent } from "@/lib/types";
+import { EventoEvent } from "@prisma/client";
 
 export async function getEvents(city: string) {
   const res = await fetch(
