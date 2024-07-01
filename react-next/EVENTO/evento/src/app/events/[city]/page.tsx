@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Loading from "./loading";
 import { toTitalCase } from "@/lib/utils";
 import { Metadata } from "next";
+import { z } from "zod";
 
 type EventsProps = {
   params: { city: string };
@@ -13,11 +14,16 @@ type EventsPageProps = EventsProps & {
   searchParams: { page: string };
 };
 
+const pageNumberSchema = z.coerce.number().int().positive().optional();
+
 const EventsPage = async ({
   params: { city },
   searchParams,
 }: EventsPageProps) => {
-  const page = searchParams.page || 1;
+  const parsedPage = pageNumberSchema.safeParse(searchParams.page);
+  if (!parsedPage.success) {
+    throw new Error();
+  }
   return (
     <main className="flex flex-col items-center px-[20px] py-24">
       {city === "all" ? (
@@ -30,8 +36,8 @@ const EventsPage = async ({
           </span>
         </H1>
       )}
-      <Suspense key={city + page} fallback={<Loading />}>
-        <EventsList city={city} page={Number(page)} />
+      <Suspense key={city + parsedPage.data} fallback={<Loading />}>
+        <EventsList city={city} page={parsedPage.data} />
       </Suspense>
     </main>
   );

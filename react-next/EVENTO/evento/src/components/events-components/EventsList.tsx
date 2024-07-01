@@ -6,10 +6,10 @@ import { EventoEvent } from "@prisma/client";
 
 type Props = {
   city: string;
-  page: number;
+  page?: number;
 };
 
-const EventsList = async ({ city, page }: Props) => {
+const EventsList = async ({ city, page = 1 }: Props) => {
   const { events, totalCount }: { events: EventoEvent[]; totalCount: number } =
     await getEvents(city, page);
 
