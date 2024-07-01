@@ -1,22 +1,21 @@
 import EventsList from "components/events-components/EventsList";
 import H1 from "components/H1";
+import { Suspense } from "react";
+import Loading from "./loading";
+import { toTitalCase } from "@/lib/utils";
+import { Metadata } from "next";
 
 type EventsProps = {
   params: { city: string };
 };
 
-import { EventoEvent } from "@/lib/types";
+export function generateMetadata({ params }: EventsProps): Metadata {
+  return {
+    title: `Events in ${toTitalCase(params.city)}`,
+  };
+}
 
 const EventsPage = async ({ params: { city } }: EventsProps) => {
-  const res = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`,
-    {
-      cache: "no-cache",
-    },
-  );
-
-  const events: EventoEvent[] = await res.json();
-
   return (
     <main className="flex flex-col items-center px-[20px] py-24">
       {city === "all" ? (
@@ -25,11 +24,13 @@ const EventsPage = async ({ params: { city } }: EventsProps) => {
         <H1 className="mb-28">
           Events In{" "}
           <span className="capitalize text-accent underline">
-            {city.charAt(0).toUpperCase() + city.slice(1)}
+            {toTitalCase(city)}
           </span>
         </H1>
       )}
-      <EventsList events={events} />
+      <Suspense fallback={<Loading />}>
+        <EventsList city={city} />
+      </Suspense>
     </main>
   );
 };

@@ -1,12 +1,15 @@
 import { EventoEvent } from "@/lib/types";
 import React from "react";
 import EventCard from "./EventCard";
+import { getEvents } from "@/services/events";
 
 type Props = {
-  events: EventoEvent[];
+  city: string;
 };
 
-const EventsList = ({ events }: Props) => {
+const EventsList = async ({ city }: Props) => {
+  const events: EventoEvent[] = await getEvents(city);
+
   return (
     <React.Fragment>
       <section className="flex flex-wrap justify-center gap-10">
