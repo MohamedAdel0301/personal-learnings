@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const EventPage = async ({ params }: Props) => {
   const slug = params.slug;
   const event = await getEvent(slug);
-
+  
   return (
     <main>
       <section className="relative flex items-center justify-center overflow-hidden py-14 md:py-20 lg:h-[361px]">
