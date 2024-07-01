@@ -1,13 +1,9 @@
 import { toTitalCase } from "@/lib/utils";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
 
-export async function getEvents(city: string, page = 1) {
-  // const res = await fetch(
-  //   `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`,
-  // );
-  // const events: EventoEvent[] = await res.json();
-  ``;
+export const getEvents = unstable_cache(async (city: string, page = 1) => {
   const events = await prisma.eventoEvent.findMany({
     where: {
       city: city === "all" ? undefined : toTitalCase(city),
@@ -26,11 +22,11 @@ export async function getEvents(city: string, page = 1) {
   });
   return {
     events,
-    totalCount
+    totalCount,
   };
-}
+});
 
-export async function getEvent(slug: string) {
+export const getEvent = unstable_cache(async (slug: string) => {
   // const res = await fetch(
   //   `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`,
   // );
@@ -44,4 +40,4 @@ export async function getEvent(slug: string) {
   if (!event) return notFound();
 
   return event;
-}
+});
